@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MOVE THE SQUARE</title>
+    
+        <style>
+            /* @keyframes transformQuadrantI {
+                0% { transform: rotateZ(45deg) }
+            }
+            
+            @keyframes transformQuadrantII {
+                0% { transform: rotate(-45deg) }
+            }
+
+            @keyframes transformQuadrantIII {
+                0% { transform: rotateZ(-135deg) }
+            } 
+            
+            @keyframes transformQuadrantIV {
+                0% { transform: rotateZ(135deg) }
+            } */
+
+            #square {
+                display: block;
+                position: relative;
+                top: 150px;
+                left: 150px;
+                width: 50px;
+                height: 75px;
+            }
+            #car {
+                width: 75%;
+                height: auto;
+            }
+        </style>
+    
+    </head>
+    <body>
+
+        <div id="square"><img id="car" src="whiteCar.jpg"></div>
+        
+        <script>
+            
+            
+            let playerObject = document.getElementById('square');
+            let playerPosition = [0,0];
+            let playerRotation = 0;                                
+            let speed = 5;
+            let X;
+            let Y;
+            
+            const findCoordinates = (degrees) => {
+                let radians = degrees*(Math.PI/180)
+                X = speed*Math.cos(radians);
+                Y = speed*Math.sin(radians);                
+            };
+            
+            const gas = () => {playerPosition[0] -= X; playerPosition[1] -= Y};
+                        
+            const reverse = () => {playerPosition[0] += X; playerPosition[1] += Y};
+
+            const steerLeft = () => {
+                if (keyVerb[0].bool === true || keyVerb[1].bool === true)
+                keyVerb[1].bool === false
+                ? playerRotation += 3
+                : playerRotation -= 3
+            }
+            
+            const steerRight = () => {
+                if (keyVerb[0].bool === true || keyVerb[1].bool === true)
+                keyVerb[1].bool === false
+                ? playerRotation -= 3
+                : playerRotation += 3
+            }
+
+            let keyVerb = [
+                {button: "w", bool: false, action: gas},
+                {button: "s", bool: false, action: reverse},
+                {button: "a", bool: false, action: steerLeft},
+                {button: "d", bool: false, action: steerRight}
+            ];
+
+            document.addEventListener('keydown', (e) => {                
+                for (let i = 0; i < keyVerb.length; i++) {
+                    if (e.key === keyVerb[i].button) {
+                        keyVerb[i].bool = true;
+                    }
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                for (let i = 0; i < keyVerb.length; i++) {
+                    if (e.key === keyVerb[i].button) {
+                        keyVerb[i].bool = false;                        
+                    }
+                }
+            });        
+
+            const reRender = () => {
+                findCoordinates(playerRotation);
+                                        
+                playerObject.style.transform = `rotateZ(${playerRotation*(-1)}deg)`;
+                playerObject.style.left = `${playerPosition[1]}px`;
+                playerObject.style.top = `${playerPosition[0]}px`;
+
+                for (let i = 0; i < keyVerb.length; i++) {
+                    if (keyVerb[i].bool === true) {
+                        keyVerb[i].action();                                                                                
+                    }
+                } 
+            };
+
+            setInterval(reRender, 20);
+
+
+        </script>
+
+    </body>
+</html>

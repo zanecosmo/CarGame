@@ -1,0 +1,131 @@
+<html>
+    <head>
+        <title>MOVE THE SQUARE</title>
+    
+        <style>
+
+            * {
+                box-sizing: border-box;
+            }
+
+            #map {
+                display: block;
+                position: absolute;
+                width: 60vw;
+                height: 60vw;
+                max-height: 80vh;
+                max-width: 80vh;
+                border: 1px solid black;
+                border-top: 3px solid black;
+                overflow: hidden;
+                /* left: 20%;
+                top: 2%; */
+            }
+
+            #playerObject {
+                display: block;
+                position: relative;
+                width: 20px;
+                height: 35px;
+                left: 300px;
+                top: 300px;
+                background-color: red;
+                border-top: 2px solid black;
+                border-radius: 10px;
+                z-index: -1
+            }
+
+        </style>
+    
+    </head>
+
+    <body>
+
+        <div id="map"></div>
+        <div id="playerObject"></div>
+        
+
+        <script>
+
+            let map = document.getElementById("map");
+            let playerObject = document.getElementById("playerObject");
+            let mapRotation = 0;
+            let mapPosition = [0,0];
+            let playerRotation = 0;
+            let speed = 5;
+
+            const gas = () => {
+                mapPosition[0] += 5;
+                mapPosition[1] += 0;
+                
+            };
+                        
+            const reverse = () => {
+                mapPosition[0] -= 5;
+                mapPosition[1] -= 0;
+            };
+
+            const steerLeft = () => {
+                if (keyVerb[0].bool === true || keyVerb[1].bool === true)
+                    keyVerb[1].bool === false
+                    ? mapRotation -= .5
+                    : mapRotation += .5
+            }
+            
+            const steerRight = () => {
+                if (keyVerb[0].bool === true || keyVerb[1].bool === true)
+                    keyVerb[1].bool === false
+                    ? mapRotation += .5
+                    : mapRotation -= .5
+            }
+            
+            const findCoordinates = (degrees) => {
+                let radians = degrees*(Math.PI/180)
+                X = speed*Math.cos(radians);
+                Y = speed*Math.sin(radians);                
+            };
+
+            let keyVerb = [
+                {button: "w", bool: false, action: gas},
+                {button: "s", bool: false, action: reverse},
+                {button: "a", bool: false, action: steerLeft},
+                {button: "d", bool: false, action: steerRight}
+            ];
+
+            document.addEventListener('keydown', (e) => {                
+                for (let i = 0; i < keyVerb.length; i++) {
+                    if (e.key === keyVerb[i].button) {
+                        keyVerb[i].bool = true;
+                    }
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                for (let i = 0; i < keyVerb.length; i++) {
+                    if (e.key === keyVerb[i].button) {
+                        keyVerb[i].bool = false;                        
+                    }
+                }
+            });
+
+            const reRender = () => {
+                findCoordinates(mapRotation);
+                                        
+                map.style.transform = `rotateZ(${mapRotation*(-1)}deg)`;
+                //playerObject.style.transform = `rotateZ(${mapRotation}deg)`;
+                map.style.left = `${mapPosition[1]}px`;
+                map.style.top = `${mapPosition[0]}px`;
+
+                for (let i = 0; i < keyVerb.length; i++) {
+                    if (keyVerb[i].bool === true) {
+                        keyVerb[i].action();                                                                                
+                    }
+                } 
+            };
+
+            setInterval(reRender, 20);
+
+        </script>
+
+    </body>
+</html>
