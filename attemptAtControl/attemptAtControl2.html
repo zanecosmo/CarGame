@@ -1,24 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MOVE THE SQUARE</title>
+        <title>MOVE THE CAR</title>
     
         <style>
-            /* @keyframes transformQuadrantI {
-                0% { transform: rotateZ(45deg) }
-            }
-            
-            @keyframes transformQuadrantII {
-                0% { transform: rotate(-45deg) }
-            }
-
-            @keyframes transformQuadrantIII {
-                0% { transform: rotateZ(-135deg) }
-            } 
-            
-            @keyframes transformQuadrantIV {
-                0% { transform: rotateZ(135deg) }
-            } */
 
             #square {
                 display: block;
@@ -32,86 +17,142 @@
                 width: 75%;
                 height: auto;
             }
-        </style>
+            </style>
     
     </head>
     <body>
-
+    
         <div id="square"><img id="car" src="whiteCar.jpg"></div>
         
         <script>
             
-            
             let playerObject = document.getElementById('square');
-            let playerPosition = [0,0];
-            let playerRotation = 0;                                
-            let speed = 5;
             let X;
             let Y;
-            
+            let playerPosition = [0,0];
+            let playerRotation = 0; 
+            let turnRadius = 5;                               
+            let topSpeed = 10;
+            let currentSpeed = 0;
+
             const findCoordinates = (degrees) => {
                 let radians = degrees*(Math.PI/180)
-                X = speed*Math.cos(radians);
-                Y = speed*Math.sin(radians);                
+                X = currentSpeed*Math.cos(radians);
+                Y = currentSpeed*Math.sin(radians);                
             };
-            
-            const gas = () => {playerPosition[0] -= X; playerPosition[1] -= Y};
-                        
-            const reverse = () => {playerPosition[0] += X; playerPosition[1] += Y};
+                    
+            const accelerate = (mod) => {
+                if (keyVerb[0].tween === true || keyVerb[1].tween === true) {
+                    keyVerb[0].tween = false;
+                    keyVerb[1].tween = false;
+                }
+                playerPosition[0] += mod*X; 
+                playerPosition[1] += mod*Y; 
+                if (currentSpeed < topSpeed) {
+                    currentSpeed++
+                }                    
+            }        
+                    
+            const deccelerate = (mod) => {
+                playerPosition[0] += mod*X; 
+                playerPosition[1] += mod*Y; 
+                if (currentSpeed > 0) {
+                    currentSpeed--
+                } else {
+                    keyVerb[0].tween = false;
+                    keyVerb[1].tween = false;
+                }
+            }
 
             const steerLeft = () => {
-                if (keyVerb[0].bool === true || keyVerb[1].bool === true)
-                keyVerb[1].bool === false
-                ? playerRotation += 3
-                : playerRotation -= 3
+                if (keyVerb[0].bool === true || keyVerb[0].tween === true) {
+                    playerRotation += turnRadius
+                } else if (keyVerb[1].bool === true || keyVerb[1].tween === true) {
+                    playerRotation -= turnRadius
+                }
             }
-            
+
             const steerRight = () => {
-                if (keyVerb[0].bool === true || keyVerb[1].bool === true)
-                keyVerb[1].bool === false
-                ? playerRotation -= 3
-                : playerRotation += 3
+                if (keyVerb[0].bool === true || keyVerb[0].tween === true) {
+                    playerRotation -= turnRadius
+                } else if (keyVerb[1].bool === true || keyVerb[1].tween === true) {
+                    playerRotation += turnRadius
+                }
+            }
+
+            const steerEnd = (mod) => {
+                keyVerb[mod].tween = false
             }
 
             let keyVerb = [
-                {button: "w", bool: false, action: gas},
-                {button: "s", bool: false, action: reverse},
-                {button: "a", bool: false, action: steerLeft},
-                {button: "d", bool: false, action: steerRight}
+                {button: "w", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: -1},
+                {button: "s", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: 1},
+                {button: "a", tween: false, bool: false, otherAction: steerEnd, action: steerLeft, modifier: 2},      
+                {button: "d", tween: false, bool: false, otherAction: steerEnd, action: steerRight, modifier: 3}
             ];
 
+            // // Pseudo code for api concept:
+            // document.addEventListener('keydown', (e) => {                
+            //     for (let i = 0; i < keyVerb.length; i++) {
+            //         if (e.key === keyVerb[i].button) {
+            //             let payload = {buttonLoad: keyVerb[i].button, boolLoad: "true"};
+            //             api.post("inputController/whatever", payload).then(response => {
+            //                 //broadcasted
+            //                 keyVerb[i].bool = true;    
+            //             })
+            //         }
+            //     }
+            // });
+            
+            // document.addEventListener('keyup', (e) => {                
+            //     for (let i = 0; i < keyVerb.length; i++) {
+            //         if (e.key === keyVerb[i].button) {
+            //             let payload = {buttonLoad: keyVerb[i].button, boolLoad: "false", tweenLoad: "true"};
+            //             api.post("ipnutController/whatever", payload).then(response => {
+            //                 //
+            //             })
+            //         }
+            //     }
+            // }); 
+
+            // actual current workig code:            
             document.addEventListener('keydown', (e) => {                
                 for (let i = 0; i < keyVerb.length; i++) {
                     if (e.key === keyVerb[i].button) {
                         keyVerb[i].bool = true;
                     }
+                    keyVerb.forEach(key => {console.log(key.bool)})
                 }
             });
-
-            document.addEventListener('keyup', (e) => {
+            
+            document.addEventListener('keyup', (e) => {                
                 for (let i = 0; i < keyVerb.length; i++) {
                     if (e.key === keyVerb[i].button) {
-                        keyVerb[i].bool = false;                        
+                        keyVerb[i].bool = false;
+                        keyVerb[i].tween = true;      
                     }
+                    keyVerb.forEach(key => {console.log(key.bool)})
                 }
-            });        
+            });            
 
             const reRender = () => {
-                findCoordinates(playerRotation);
-                                        
+                findCoordinates(playerRotation);                                        
+                
                 playerObject.style.transform = `rotateZ(${playerRotation*(-1)}deg)`;
                 playerObject.style.left = `${playerPosition[1]}px`;
                 playerObject.style.top = `${playerPosition[0]}px`;
-
+                
                 for (let i = 0; i < keyVerb.length; i++) {
-                    if (keyVerb[i].bool === true) {
-                        keyVerb[i].action();                                                                                
+                    if (keyVerb[i].bool === true) {                        
+                        keyVerb[i].action(keyVerb[i].modifier);                                                                                
+                    } 
+                    else if (keyVerb[i].tween === true) {
+                        keyVerb[i].otherAction(keyVerb[i].modifier);
                     }
-                } 
+                }                                                              
             };
 
             setInterval(reRender, 20);
-
 
         </script>
 

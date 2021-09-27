@@ -1,0 +1,4 @@
+<section>
+   <div id="square"><img id="car" src="/images/whiteCar.jpg"></div> 
+   <div id="hostButton">Be the Host</div>
+</section>

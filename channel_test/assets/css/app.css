@@ -1,0 +1,41 @@
+.title {
+  font-size: 50px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#square {
+  display: block;
+  position: relative;
+  top: 150px;
+  left: 150px;
+  width: 50px;
+  height: 75px;
+}
+#car {
+  width: 75%;
+  height: auto;
+}
+
+#hostButton {
+  border: 1px solid black;
+  border-radius: 2;
+}
+
+#hostButton:hover {
+  cursor: pointer;
+}
+
+.menuButton {
+  display: block;
+  border: 1px solid black;
+  border-radius: 2px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 2px;
+  margin: 4px;
+  
+}
+
+.menuButton:hover {
+  cursor: pointer;
+}
