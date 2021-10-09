@@ -26,6 +26,15 @@
   cursor: pointer;
 }
 
+#playerButton {
+  border: 1px solid black;
+  border-radius: 2;
+}
+
+#playerButton:hover {
+  cursor: pointer;
+}
+
 .link {
   text-decoration: none;
   color: black;

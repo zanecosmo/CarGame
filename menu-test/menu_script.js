@@ -18,13 +18,12 @@ const joinPage =
     `
     <div class="text">ENTER GAME CODE:</div>
     <form>
-    <input type="text" placeholder="enter game code here"/>
+    <input type="text" class="input" placeholder="ENTER CODE HERE"/>
+    <div id="invalidCode" class="redLetter">--invalid game-code, please try again--</div>
     <div id="joinLobbyButton" class="menuButton">Join</div>
     </form>
     <div id="backButton" class="menuButton">Back</div>
     `
-
-let isHost = false;
 
 const rootShell = document.getElementById('shell');
 const rootPartial = document.getElementById('partial');
@@ -51,8 +50,12 @@ const startListener = (startButton) => {
         startButton.addEventListener('click', () => {
             console.log("connect to host")
             let gameCode = "";
-            isHost = true; 
-            let playerNumber = 4;           
+            let isHost = true; 
+            let playerNumber = 1;
+            let playerOneName = "bobert";
+            let playerTwoName = "loandbehld";
+            let playerThreeName = "";
+            let playerFourName = "";
             for (let i = 0; i < 5; i++) {gameCode += Math.floor(Math.random()*10)};
             
             renderPartial(
@@ -61,31 +64,31 @@ const startListener = (startButton) => {
                 <br>
                 <div class="text">PLAYERS
                     ${playerNumber === 4 
-                        ? "<span class='redLetter'>--max number of players reached--</span>"
+                        ? "<span id='maxPlayers' class='redLetter'>--max number of players reached--</span>"
                         :""
                     }
                 </div>
                 
                 <div class="playersContainer">
-                    <div>1. PlayerName ${isHost === true ? "<span class='host'>--HOST--</span>" : ""}</div>                
+                    <div>1. ${playerOneName} ${isHost === true ? "<span class='host'>HOST</span>" : ""}</div>                
                 
                     <div>
-                    ${playerNumber === 2 || playerNumber === 3 || playerNumber === 4
-                        ? "2. PlayerName" 
+                    ${playerTwoName !== ""
+                        ? `2. ${playerTwoName}` 
                         : ""
                     } 
                     </div>
                     
                     <div>
-                    ${playerNumber === 3 || playerNumber === 4
-                        ? "3. PlayerName" 
+                    ${playerThreeName !== ""
+                        ? `3. ${playerThreeName}` 
                         : ""
                     }                 
                     </div>
                     
                     <div>
-                    ${playerNumber === 4 
-                        ? "4. PlayerName" 
+                    ${playerFourName !== "" 
+                        ? `4. ${playerFourName}` 
                         : ""
                     } 
                     </div>
@@ -93,7 +96,7 @@ const startListener = (startButton) => {
                        
                 ${isHost === true 
                     ? "<div id='playGameButton' class='menuButton'>Play</div>" 
-                    : ""
+                    : "<div class='smallText'>Please wait for host to start the game</div>"
                 }
                 <div id="leaveGameButton" class="menuButton">Leave Game</div>
                 `

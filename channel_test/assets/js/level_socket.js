@@ -13,14 +13,6 @@ const privateChannel = privateSocket.channel("private:lobby", {});
 // .receive("error", (resp) => {console.log("Unable to join", resp);});
 //#endregion
 
-// ESTABLISH PUBLIC SOCKET CONNECTION
-//#region
-
-// publicChannel.join()
-// .receive("ok", (resp) => {console.log("Joined successfully", resp);})
-// .receive("error", (resp) => {console.log("Unable to join", resp);});
-//#endregion
-
 // DECLARE GLOBAL VARIABLES
 //#region
 const playerObject = document.getElementById('square');
@@ -35,7 +27,16 @@ let isHost = false;
 //#endregion
 
 const testHostButton = document.getElementById("hostButton")
+const testPlayerButton = document.getElementById("playerButton")
 if (testHostButton) {testHostButton.onclick = setHost};
+if (testPlayerButton) {testPlayerButton.onclick = setPlayer};
+
+function setPlayer() {
+  privateSocket.connect();
+  privateChannel.join()
+    .receive("ok", (resp) => {console.log("JOINED PRIVATE CHANNEL", resp);})
+    .receive("error", (resp) => {console.log("UNABLE TO JOIN PRIVTE CHANNEL", resp);});
+}
 
 function setHost() {
   privateSocket.connect();
@@ -172,7 +173,7 @@ function setHost() {
     playerPosition[1],
     playerRotation
   ];
-  
+  console.log(positionPacket);
   privateChannel.push("updateOutgoing", {update: positionPacket});
 };
 //#endregion
@@ -181,6 +182,7 @@ function setHost() {
 //#region
 privateChannel.on("updateIncoming", (updatePacket) => {
   if (isHost === false) {
+    console.log("updates recieved");
     playerObject.style.transform = `rotateZ(${updatePacket.position[2]*(-1)}deg)`;
     playerObject.style.left = `${updatePacket.position[1]}px`;
     playerObject.style.top = `${updatePacket.position[0]}px`;

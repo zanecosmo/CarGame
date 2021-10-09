@@ -30,19 +30,22 @@
 .menuButton {
 display: block;
 position: relative;
-border: 1px solid black;
+border: 2px solid black;
 border-radius: 2px;
 left: 2%;
 width: 22%;
-font-family: Arial, Helvetica, sans-serif;    
+font-family: Arial, Helvetica, sans-serif; 
+font-weight: bold;   
 padding: 4px;
 margin: 6px;
 transform: skew(-11deg);
 cursor: pointer;
+background-color:rgb(245, 245, 245);
 }
 
 .menuButton:hover {
 font-weight: bold;
+/* border-width: 2px; */
 animation-name: menuButtonSlide;
 animation-duration: 75ms;
 animation-timing-function: linear;
@@ -65,7 +68,7 @@ color: rgb(0, 0, 190);
 }
 
 .redLetter {
-position: relative;
+position: absolute;
 color: rgb(220, 0, 0);
 font-family: Arial, Helvetica, sans-serif;
 font-size: 15px;
@@ -99,6 +102,17 @@ font-weight: bold;
 left: 2%;
 }
 
+.smallText {
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: oblique;
+  font-weight: bold;
+  left: 2%;
+  color: rgb(0, 180, 0);
+  margin-top: 5px;
+}
+
 .playersContainer {
 position: relative;
 border-top: 1px dashed black;
@@ -113,4 +127,23 @@ width: 95%;
 
 #playGameButton {
 color: rgb(0, 180, 0);
+}
+
+.input {
+  position: relative;
+  left: 2%;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  border-width: 1px;
+  border-radius: 3px;
+  transform: skew(-11deg);
+}
+#maxPlayers {
+  top: 2px;
+  left: 100px;
+}
+
+#invalidCode {
+  top: 178px;
+  left: 3%;
 }

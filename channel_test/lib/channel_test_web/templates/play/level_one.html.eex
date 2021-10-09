@@ -1,4 +1,5 @@
 <section>
    <div id="square"><img id="car" src="/images/whiteCar.jpg"></div> 
    <div id="hostButton">Be the Host</div>
+   <div id="playerButton">Be the player</div>
 </section>
