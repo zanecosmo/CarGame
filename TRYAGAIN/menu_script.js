@@ -7,8 +7,8 @@ const menuShell =
 
 const startPage = 
     `
-    <div id="startGameButton" class="menuButton">START GAME</div>
-    <div id="joinGameButton" class="menuButton">JOIN GAME</div>
+    <div id="startGameButton" class="menuButton">Start Game</div>
+    <div id="joinGameButton" class="menuButton">Join Game</div>
     `
 
 const privateLobby = null;
@@ -19,9 +19,9 @@ const joinPage =
     <div class="text">ENTER GAME CODE:</div>
     <form>
     <input type="text" placeholder="enter game code here"/>
-    <div id="joinLobbyButton" class="menuButton">JOIN</div>
+    <div id="joinLobbyButton" class="menuButton">Join</div>
     </form>
-    <div id="backButton" class="menuButton">BACK</div>
+    <div id="backButton" class="menuButton">Back</div>
     `
 
 let isHost = false;
@@ -35,7 +35,7 @@ renderShell(menuShell);
 
 const renderPartial = (page) => rootPartial.innerHTML = page;
 
-const partialThing = () => {
+const startPartial = () => {
     
     renderPartial(startPage);
         
@@ -50,10 +50,10 @@ const startListener = (startButton) => {
     if (startButton) {
         startButton.addEventListener('click', () => {
             console.log("connect to host")
-            let gameCode = "0";
+            let gameCode = "";
             isHost = true; 
             let playerNumber = 4;           
-            for (let i = 0; i < 4; i++) {gameCode += Math.floor(Math.random()*10)};
+            for (let i = 0; i < 5; i++) {gameCode += Math.floor(Math.random()*10)};
             
             renderPartial(
                 `
@@ -92,10 +92,10 @@ const startListener = (startButton) => {
                 </div>                
                        
                 ${isHost === true 
-                    ? "<div id='playGameButton' class='menuButton'>PLAY</div>" 
+                    ? "<div id='playGameButton' class='menuButton'>Play</div>" 
                     : ""
                 }
-                <div id="leaveGameButton" class="menuButton">LEAVE GAME</div>
+                <div id="leaveGameButton" class="menuButton">Leave Game</div>
                 `
                 );
                 
@@ -119,23 +119,33 @@ const startListener = (startButton) => {
     const leaveListener = (leaveButton) => {
         if (leaveButton) {leaveButton.addEventListener('click', () => {
             console.log("leave server and switch hosts");
-            partialThing();
+            startPartial();
         })}
     };
     
     const playListener = (playButton) => {
         if (playButton) {playButton.addEventListener('click', () => {
-            console.log("switch to level shell, go to level one partial")
+            renderShell(
+                `
+                <div></div>
+                `
+            );
+            renderPartial(
+                `
+                <div id="square"><img id="car" src="blackCar.jpg"></div>
+                `
+            );
+            startRender();
         })}
     }
 
     const backListener = (backButton) => {
         if (backButton) {backButton.addEventListener('click', () => {
-            partialThing();
+            startPartial();
         })}
     };
     
-    partialThing();
+    startPartial();
 
     // --> onclick: if (isHost === true): choose new host, and exit back to start menu, and remove player from page
     // otherwise, simply exit to start menu and remove player from page

@@ -1,40 +1,37 @@
 // DECLARE GLOBAL VARIABLES
 //#region
-const playerObject = document.getElementById('square');
 const topSpeed = 10;
 const turnRadius = 5;                               
-let X;
-let Y;
 let playerPosition = [0,0];
 let playerRotation = 0; 
 let currentSpeed = 0;
-let isHost = false;
 //#endregion
 
-  // UTILITY FUNCTIONS
-  //#region 
-  const findCoordinates = (degrees) => {
-    let radians = degrees*(Math.PI/180)
-    X = currentSpeed*Math.cos(radians);
-    Y = currentSpeed*Math.sin(radians);                
-  };
-  
-  const accelerate = (mod) => {
-    if (keyVerb[0].tween === true || keyVerb[1].tween === true) {
-      keyVerb[0].tween = false;
-      keyVerb[1].tween = false;
-    }
-    playerPosition[0] += mod*X; 
-    playerPosition[1] += mod*Y; 
-    if (currentSpeed < topSpeed) {
-      currentSpeed++
-    }                    
-  }        
-  
-  const deccelerate = (mod) => {
-    playerPosition[0] += mod*X; 
-    playerPosition[1] += mod*Y; 
-    if (currentSpeed > 0) {
+// UTILITY FUNCTIONS
+//#region 
+const findCoordinates = (degrees) => {
+  let radians = degrees*(Math.PI/180);
+  let X = currentSpeed*Math.cos(radians);
+  let Y = currentSpeed*Math.sin(radians);
+  return {X: X,Y: Y}
+};
+
+const accelerate = (mod, x, y) => {
+  if (keyVerb[0].tween === true || keyVerb[1].tween === true) {
+    keyVerb[0].tween = false;
+    keyVerb[1].tween = false;
+  }
+  playerPosition[0] += mod*x; 
+  playerPosition[1] += mod*y; 
+  if (currentSpeed < topSpeed) {
+    currentSpeed++
+  }                    
+}        
+
+const deccelerate = (mod, x, y) => {
+  playerPosition[0] += mod*x; 
+  playerPosition[1] += mod*y; 
+  if (currentSpeed > 0) {
       currentSpeed--
     } else {
       keyVerb[0].tween = false;
@@ -63,101 +60,61 @@ let isHost = false;
   }
   // #endregion
   
-  // BUTTON-PRESS OBJECTS ARRAY 
-  //#region 
-  let keyVerb = [
-    {button: "w", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: -1},
-    {button: "s", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: 1},
-    {button: "a", tween: false, bool: false, otherAction: steerEnd, action: steerLeft, modifier: 2},      
-    {button: "d", tween: false, bool: false, otherAction: steerEnd, action: steerRight, modifier: 3}
-  ];
-  //#endregion
-  
-  // KEYPRESS SOCKET HANDLERS
-  //#region
-
-  // test for eventlistener generator
-
-  document.addEventListener('keydown', (e) => {                
-    for (let i = 0; i < keyVerb.length; i++) {
-      if (e.key === keyVerb[i].button) {
-        privateChannel.push("keydownTrue", {message: keyVerb[i].button});
-      }
-    }
-  });
-  
-  document.addEventListener('keyup', (e) => {                
-    for (let i = 0; i < keyVerb.length; i++) {
-      if (e.key === keyVerb[i].button) {
-        privateChannel.push("keyupTrue", {message: keyVerb[i].button});          
-      }
-    }
-  });  
-  
-  privateChannel.on("globalKeyDown", (key) => {
-    for (let i = 0; i < keyVerb.length; i++) {
-      if (keyVerb[i].button === key.letter) {
-        keyVerb[i].bool = true;      
-      }
-    }
-  });
-  
-  privateChannel.on("globalKeyUp", (key) => {
-    for (let i = 0; i < keyVerb.length; i++) {
-      if (keyVerb[i].button === key.letter) {
-        keyVerb[i].bool = false;
-        keyVerb[i].tween = true;
-      }
-    }
-  });
-  //#endregion
-  
-  // LOCAL RENDER-MACHINE
-  //#region
-  const moveCar = () => {
-    
-    findCoordinates(playerRotation);                                        
-    
-    playerObject.style.transform = `rotateZ(${playerRotation*(-1)}deg)`;
-    playerObject.style.left = `${playerPosition[1]}px`;
-    playerObject.style.top = `${playerPosition[0]}px`;
-    
-    for (let i = 0; i < keyVerb.length; i++) {
-      if (keyVerb[i].bool === true) {                        
-        keyVerb[i].action(keyVerb[i].modifier)                                                                               
-    } 
-    else if (keyVerb[i].tween === true) {
-      keyVerb[i].otherAction(keyVerb[i].modifier)
-    }
-  }; 
-  
-  let positionPacket = [
-    playerPosition[0],
-    playerPosition[1],
-    playerRotation
-  ];
-  
-  privateChannel.push("updateOutgoing", {update: positionPacket});
-};
+// BUTTON-PRESS OBJECTS ARRAY 
+//#region 
+let keyVerb = [
+  {button: "w", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: -1},
+  {button: "s", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: 1},
+  {button: "a", tween: false, bool: false, otherAction: steerEnd, action: steerLeft, modifier: 2},      
+  {button: "d", tween: false, bool: false, otherAction: steerEnd, action: steerRight, modifier: 3}
+];
 //#endregion
+  
+// KEYPRESS SOCKET HANDLERS
+//#region  
+document.addEventListener('keydown', (e) => {                
+  for (let i = 0; i < keyVerb.length; i++) {
+    if (e.key === keyVerb[i].button) {
+      keyVerb[i].bool = true;
+    }
+  }
+});
 
-//GLOBAL RENDER-MACHINE
-//#region
-privateChannel.on("updateIncoming", (updatePacket) => {
-  if (isHost === false) {
-    playerObject.style.transform = `rotateZ(${updatePacket.position[2]*(-1)}deg)`;
-    playerObject.style.left = `${updatePacket.position[1]}px`;
-    playerObject.style.top = `${updatePacket.position[0]}px`;
+document.addEventListener('keyup', (e) => {                
+  for (let i = 0; i < keyVerb.length; i++) {
+    if (e.key === keyVerb[i].button) {
+      keyVerb[i].bool = false;
+      keyVerb[i].tween = true;
+    }
   }
 });
 //#endregion
-
-// RENDER-MACHINE STARTER
+  
+// LOCAL RENDER-MACHINE
 //#region
-const reRender = () => {
-  if (isHost === true) {
-    setInterval(moveCar, 20);
-  }
+const moveCar = () => {
+  const playerObject = document.getElementById('square');
+  
+  let carPosition = findCoordinates(playerRotation);                                        
+  
+  playerObject.style.transform = `rotateZ(${playerRotation*(-1)}deg)`;
+  playerObject.style.left = `${playerPosition[1]}px`;
+  playerObject.style.top = `${playerPosition[0]}px`;
+  
+  for (let i = 0; i < keyVerb.length; i++) {
+    if (keyVerb[i].bool === true) {                        
+      keyVerb[i].action(keyVerb[i].modifier, carPosition.X, carPosition.Y)                                                                               
+    } 
+    else if (keyVerb[i].tween === true) {
+      keyVerb[i].otherAction(keyVerb[i].modifier, carPosition.X, carPosition.Y)
+    }
+  }; 
 };
-//reRender();
+//#endregion
+  
+// RENDER STARTER
+//#region  
+const startRender = () => {
+  setInterval(moveCar, 20)
+}
 //#endregion
