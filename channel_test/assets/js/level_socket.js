@@ -1,14 +1,24 @@
 import {Socket} from "phoenix"
 
-// ESTABLISH SOCKET CONNECTIONS
+console.log("JS FILE READING");
+
+// ESTABLISH PRIVATE SOCKET CONNECTION
 //#region
-let privateSocket = new Socket("/private_socket", {params: {token: window.userToken}});
-privateSocket.connect();
-const channel = privateSocket.channel("private:lobby", {});
-channel.join()
-.receive("ok", (resp) => {console.log("Joined successfully", resp);})
-.receive("error", (resp) => {console.log("Unable to join", resp);
-});
+const privateSocket = new Socket("/private_socket", {params: {token: window.userToken}});
+const privateChannel = privateSocket.channel("private:lobby", {});
+// privateSocket.connect();
+// const privateChannel = privateSocket.channel("private:lobby", {});
+// privateChannel.join()
+// .receive("ok", (resp) => {console.log("Joined successfully", resp);})
+// .receive("error", (resp) => {console.log("Unable to join", resp);});
+//#endregion
+
+// ESTABLISH PUBLIC SOCKET CONNECTION
+//#region
+
+// publicChannel.join()
+// .receive("ok", (resp) => {console.log("Joined successfully", resp);})
+// .receive("error", (resp) => {console.log("Unable to join", resp);});
 //#endregion
 
 // DECLARE GLOBAL VARIABLES
@@ -24,23 +34,21 @@ let currentSpeed = 0;
 let isHost = false;
 //#endregion
 
-//document.getElementById("hostButton").onclick = setHost;
-
+const testHostButton = document.getElementById("hostButton")
+if (testHostButton) {testHostButton.onclick = setHost};
 
 function setHost() {
+  privateSocket.connect();
+  privateChannel.join()
+    .receive("ok", (resp) => {console.log("JOINED PRIVATE CHANNEL", resp);})
+    .receive("error", (resp) => {console.log("UNABLE TO JOIN PRIVTE CHANNEL", resp);});
   isHost = !isHost;
   console.log(isHost);
   reRender();
 }
 
-// const setUpGame = () => {
-  
-  // }
-  
-  // document.getElementById("startGameButton").onclick = setUpGame;
-  
   // UTILITY FUNCTIONS
-  //#region
+  //#region 
   const findCoordinates = (degrees) => {
     let radians = degrees*(Math.PI/180)
     X = currentSpeed*Math.cos(radians);
@@ -89,10 +97,10 @@ function setHost() {
   const steerEnd = (mod) => {
     keyVerb[mod].tween = false
   }
-  //#endregion
+  // #endregion
   
-  // BUTTON-PRESS OBJECTS ARRAY
-  //#region
+  // BUTTON-PRESS OBJECTS ARRAY 
+  //#region 
   let keyVerb = [
     {button: "w", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: -1},
     {button: "s", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: 1},
@@ -103,10 +111,13 @@ function setHost() {
   
   // KEYPRESS SOCKET HANDLERS
   //#region
+
+  // test for eventlistener generator
+
   document.addEventListener('keydown', (e) => {                
     for (let i = 0; i < keyVerb.length; i++) {
       if (e.key === keyVerb[i].button) {
-        channel.push("keyDownTrue", {message: keyVerb[i].button});
+        privateChannel.push("keydownTrue", {message: keyVerb[i].button});
       }
     }
   });
@@ -114,12 +125,12 @@ function setHost() {
   document.addEventListener('keyup', (e) => {                
     for (let i = 0; i < keyVerb.length; i++) {
       if (e.key === keyVerb[i].button) {
-        channel.push("keyUpTrue", {message: keyVerb[i].button});          
+        privateChannel.push("keyupTrue", {message: keyVerb[i].button});          
       }
     }
   });  
   
-  channel.on("globalKeyDown", (key) => {
+  privateChannel.on("globalKeyDown", (key) => {
     for (let i = 0; i < keyVerb.length; i++) {
       if (keyVerb[i].button === key.letter) {
         keyVerb[i].bool = true;      
@@ -127,7 +138,7 @@ function setHost() {
     }
   });
   
-  channel.on("globalKeyUp", (key) => {
+  privateChannel.on("globalKeyUp", (key) => {
     for (let i = 0; i < keyVerb.length; i++) {
       if (keyVerb[i].button === key.letter) {
         keyVerb[i].bool = false;
@@ -138,7 +149,7 @@ function setHost() {
   //#endregion
   
   // LOCAL RENDER-MACHINE
-  //#region  
+  //#region
   const moveCar = () => {
     
     findCoordinates(playerRotation);                                        
@@ -162,13 +173,13 @@ function setHost() {
     playerRotation
   ];
   
-  channel.push("updateOutgoing", {update: positionPacket});
+  privateChannel.push("updateOutgoing", {update: positionPacket});
 };
 //#endregion
 
 //GLOBAL RENDER-MACHINE
 //#region
-channel.on("updateIncoming", (updatePacket) => {
+privateChannel.on("updateIncoming", (updatePacket) => {
   if (isHost === false) {
     playerObject.style.transform = `rotateZ(${updatePacket.position[2]*(-1)}deg)`;
     playerObject.style.left = `${updatePacket.position[1]}px`;
@@ -184,8 +195,8 @@ const reRender = () => {
     setInterval(moveCar, 20);
   }
 };
-// reRender();
+//reRender();
 //#endregion
 
-export default privateSocket
+console.log("JS FILE READ")
 

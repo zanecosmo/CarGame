@@ -1,4 +1,4 @@
-<div>"Game-Code:" Random Int/Char Combo</div>
+<div id="displayGameCode"></div>
 
 <div>Players</div>
 <div>Player 1. PlayerName (if (isHost === true) : HOST</div>
@@ -6,7 +6,7 @@
 <div>Player 3. PlayerName/NONE (if (isHost === true) : HOST</div>
 <div>Player 4. PlayerName/NONE (if (isHost === true) : HOST</div>
 
-<div>(max number of players reached)</div>
+<div id="maxPlayers">(max number of players reached)</div>
 
 <div>if (isHost === true): Play Button --> onclick: switch to level view, start game on level one</div>
 

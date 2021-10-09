@@ -1,5 +1,5 @@
 defmodule ChannelTestWeb.PublicSocket do
-    use Phoenix.Socket
+  use Phoenix.Socket
 
   channel "public:lobby", ChannelTestWeb.PublicChannel
 

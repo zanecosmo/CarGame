@@ -1,9 +1,0 @@
-<div id="startGameButton" class="menuButton">Start Game</div>
-<!-- onclick: generate random gamecode
-and channel.push it into a list of current existing games-->
-<div id="joinGameButton" class="menuButton">Join Game</div>
-<!--onclick: 
-connect to a "global socket"
-send a request for the list of game instances,
-make the page wth input appear
--->

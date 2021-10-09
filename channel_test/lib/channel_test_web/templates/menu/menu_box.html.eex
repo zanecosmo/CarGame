@@ -1,10 +1,4 @@
-
     <div class="title">MULTI-CAR</div>
-</section>
-
-<section>
-    <%= render "start_menu.html" %>
-</section>
-    </main>
-  </body>
-</html>
+    <section>
+        <%= render "start_menu.html" %>
+    </section>

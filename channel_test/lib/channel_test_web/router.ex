@@ -18,6 +18,10 @@ defmodule ChannelTestWeb.Router do
 
     get "/", MenuController, :start
 
+    get "/lobby", MenuController, :go_to_private_lobby
+
+    get "/join", MenuController, :go_to_join_page
+
     get "/play", PlayController, :start
   end
 

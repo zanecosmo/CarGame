@@ -26,6 +26,11 @@
   cursor: pointer;
 }
 
+.link {
+  text-decoration: none;
+  color: black;
+}
+
 .menuButton {
   display: block;
   border: 1px solid black;
@@ -33,7 +38,6 @@
   font-family: Arial, Helvetica, sans-serif;
   padding: 2px;
   margin: 4px;
-  
 }
 
 .menuButton:hover {
