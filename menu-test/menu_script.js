@@ -51,10 +51,10 @@ const startListener = (startButton) => {
             console.log("connect to host")
             let gameCode = "";
             let isHost = true; 
-            let playerNumber = 1;
+            let playerNumber = 3;
             let playerOneName = "bobert";
             let playerTwoName = "loandbehld";
-            let playerThreeName = "";
+            let playerThreeName = "jerish";
             let playerFourName = "";
             for (let i = 0; i < 5; i++) {gameCode += Math.floor(Math.random()*10)};
             
