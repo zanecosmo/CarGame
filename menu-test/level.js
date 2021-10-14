@@ -58,20 +58,17 @@ const deccelerate = (mod, x, y) => {
   const steerEnd = (mod) => {
     keyVerb[mod].tween = false
   }
-  // #endregion
+//#endregion
   
 // BUTTON-PRESS OBJECTS ARRAY 
-//#region 
 let keyVerb = [
   {button: "w", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: -1},
   {button: "s", tween: false, bool: false, otherAction: deccelerate, action: accelerate, modifier: 1},
   {button: "a", tween: false, bool: false, otherAction: steerEnd, action: steerLeft, modifier: 2},      
   {button: "d", tween: false, bool: false, otherAction: steerEnd, action: steerRight, modifier: 3}
 ];
-//#endregion
   
-// KEYPRESS SOCKET HANDLERS
-//#region  
+// KEYPRESS SOCKET HANDLERS 
 document.addEventListener('keydown', (e) => {                
   for (let i = 0; i < keyVerb.length; i++) {
     if (e.key === keyVerb[i].button) {
@@ -88,10 +85,8 @@ document.addEventListener('keyup', (e) => {
     }
   }
 });
-//#endregion
   
 // LOCAL RENDER-MACHINE
-//#region
 const moveCar = () => {
   const playerObject = document.getElementById('square');
   
@@ -110,11 +105,8 @@ const moveCar = () => {
     }
   }; 
 };
-//#endregion
   
 // RENDER STARTER
-//#region  
 const startRender = () => {
   setInterval(moveCar, 20)
 }
-//#endregion
