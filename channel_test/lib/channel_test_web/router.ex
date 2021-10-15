@@ -16,13 +16,7 @@ defmodule ChannelTestWeb.Router do
   scope "/", ChannelTestWeb do
     pipe_through :browser
 
-    get "/", MenuController, :start
-
-    get "/lobby", MenuController, :go_to_private_lobby
-
-    get "/join", MenuController, :go_to_join_page
-
-    get "/play", PlayController, :start
+    get "/", LayoutController, :start
   end
 
   # Other scopes may use custom stacks.

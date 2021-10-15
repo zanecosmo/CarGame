@@ -144,6 +144,7 @@ color: rgb(0, 180, 0);
 }
 
 #invalidCode {
+  display:none;
   top: 178px;
   left: 3%;
 }

@@ -20,70 +20,39 @@ const start = () => {
         renderPartial(startPage);
             
         // SELECTS dom elements from partial 
-        const startGameButton = document.getElementById("startGameButton");
-        const joinGameButton = document.getElementById("joinGameButton");
+        const startButton = document.getElementById("startGameButton");
+        const joinButton = document.getElementById("joinGameButton");
     
-        // USES dom elements
-
-        // JOIN INVALID LOOP
-        let tryNumber = 1;        
-
-        const attemptJoin = (tries) => {            
+        // USES dom elements                
+        if (joinButton) {joinButton.addEventListener('click', () => {                
             // DEFINES partial (static)                
             const joinPage = (
                 `
                 <div class="text">ENTER GAME CODE:</div>
                 
-                <input id="codeBox" type="text" class="input" placeholder="ENTER CODE HERE"/>
-                <div id="invalidCode" class="redLetter">--invalid game-code, please try again${
-                    tries === 1
-                        ? ''
-                        : ` (${tries.toString()})`
-                }--</div>                
+                <form>
+                <input type="text" class="input" placeholder="ENTER CODE HERE"/>
+                <div id="invalidCode" class="redLetter">--invalid game-code, please try again--</div>
+                <div id="joinLobbyButton" class="menuButton">Join</div>
+                </form>
                 
-                <div id="joinLobbyButton" class="menuButton">Join</div>                
                 <div id="backButton" class="menuButton">Back</div>
                 `
             );                
                 
             // RENDERS partial (static)
             renderPartial(joinPage);
-    
+
             // SELECTS dom elements from partial
             const backButton = document.getElementById("backButton");
-            const joinLobbyButton = document.getElementById("joinLobbyButton");
-            const codeBox = document.getElementById("codeBox");
-            const invalidCode = document.getElementById("invalidCode");
-            
-            // USES dom elements
-            if (tryNumber > 1) {invalidCode.style = 'display: inline-block;'};        
 
+            // USES dom elements
             if (backButton) {backButton.addEventListener('click', () => {
                 renderDefaultPartial();
-            })};
-            
-            if (joinLobbyButton) {joinLobbyButton.addEventListener('click', () => {
-                console.log("joinLobbyButton pressed");
-                
-                if (codeBox.value === '') {                    
-                    console.log(tries);
-                    tryNumber++;
-                    attemptJoin(tryNumber);                                    
-                } else {
-                    channel.push("message", {gameCode: codeBox.value});
-                    channel.on("blah", )
-                    tryNumber++;
-                    attemptJoin(tryNumber);
-                };
-
-            })};
-        };
-                        
-        if (joinGameButton) {joinGameButton.addEventListener('click', () => {                
-            attemptJoin(tryNumber);
+            })};                                                    
         })};        
                 
-        if (startGameButton) {startGameButton.addEventListener('click', () => {
+        if (startButton) {startButton.addEventListener('click', () => {
             // DECLARES dynamic variables
             //#region
             console.log("connect to host")
