@@ -9,7 +9,7 @@ const startRender = () => {
   let currentSpeed = 0;
   //#endregion
 
-  // UTILITY FUNCTIONS
+  // ARTICULATION FUNCTIONS
   //#region 
   const findCoordinates = (degrees) => {
     let radians = degrees*(Math.PI/180);
