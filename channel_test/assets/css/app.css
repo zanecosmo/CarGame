@@ -62,7 +62,8 @@ to {transform: translate(21px) skew(-11deg);
   -18px 0px 0px white, -20px 0px 0px rgba(0, 0, 0, .2);}
 }
 
-.host {
+#host {
+display: inline-block;
 font-weight: bold;
 color: rgb(0, 0, 190);
 }
@@ -129,21 +130,47 @@ width: 95%;
 color: rgb(0, 180, 0);
 }
 
-.input {
+#codeBox {
   position: relative;
   left: 2%;
   margin-top: 10px;
   margin-bottom: 30px;
+}
+
+#changeNameForm {
+  position: absolute;
+  display: none;
+  right: 3%;
+}
+
+#changeNameButton {
+  position: relative;
+  display: inline-block;
+  left: 2%;
+}
+.changeName {
+  cursor: pointer;
+  text-decoration: underline;
+  user-select: none;
+}
+
+.changeName:hover {
+  color: rgb(0, 0, 190);
+}
+
+.input {
   border-width: 1px;
   border-radius: 3px;
   transform: skew(-11deg);
 }
 #maxPlayers {
+  display: none;
   top: 2px;
   left: 100px;
 }
 
 #invalidCode {
-  top: 188px;
+  display:none;
+  top: 187px;
   left: 3%;
 }

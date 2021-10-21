@@ -2,7 +2,7 @@ defmodule ChannelTestWeb.PrivateChannel do
   use ChannelTestWeb, :channel
 
   @impl true
-    def join("private:" <> game_code, payload, socket) do
+    def join("private:" <> gameCode, payload, socket) do
       {:ok, socket}
     end
 
@@ -19,9 +19,8 @@ defmodule ChannelTestWeb.PrivateChannel do
     end
   
   @impl true
-    def handle_in("updateOutgoing", %{"update" => [posX, posY, rot]}, socket) do
-      broadcast socket, "updateIncoming", %{position: [posX, posY, rot]}
+    def handle_in("updateIncoming", %{"update" => [posX, posY, rot]}, socket) do
+      broadcast socket, "updateOutgoing", %{position: [posX, posY, rot]}
       {:noreply, socket}
     end
-
 end
