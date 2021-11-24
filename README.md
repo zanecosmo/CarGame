@@ -15,4 +15,4 @@ You can change your name to whatever you like, and once you all decide you are r
 As of yet, the only thing you can do is figure out who has what controls (some combination of the "W", "A", "S", and "D" keys), and move the car around the screen. There are no levels, but if there is interest in the game, further development (including levels, different game types, team-races, etc.) is a possibility.
 
 ## About
-The project uses a pure Javascript/CSS/HTML front-end, and an Express/Node.js back-end. For websocket communication it employs [Socket.io](https://socket.io/) library.
+The project uses a pure Javascript/CSS/HTML front-end, and an Express/Node.js back-end. For websocket communication it employs the [Socket.io](https://socket.io/) library.
